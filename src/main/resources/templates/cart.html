@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrito de la compra</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+        <p th:if="${successMessage}" th:text="${successMessage}" class="message-success" role="status"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="message-error" role="alert"></p>
+        <h1 >Carrito de la compra</h1>
+
+        <p th:if="${#lists.isEmpty(cartItems)}">El carrito está vacío.</p>
+
+        <table th:unless="${#lists.isEmpty(cartItems)}" >
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="product : ${cartItems}">
+                    <td th:text="${product.name}">Nombre del producto</td>
+                    <td th:text="|${#numbers.formatDecimal(product.price, 1, 'POINT', 2, 'COMMA')} €|">Precio</td>
+                    <td>
+                        <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">
+                            <button type="submit" class="btn btn-danger">Quitar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="cart-total">Total: <strong th:text="|${#numbers.formatDecimal(cartTotal, 1, 'POINT', 2, 'COMMA')} €|">0,00 €</strong></p>
+        <form th:unless="${#lists.isEmpty(cartItems)}" th:action="@{/cart/clear}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger">Vaciar carrito</button>
+        </form>
+        <a th:href="@{/products}" class="btn btn-secondary">Seguir comprando</a>
+    </div>
+</body>
+</html>

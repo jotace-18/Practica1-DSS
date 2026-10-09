@@ -2,6 +2,8 @@
 *.[mM][dD]
 ![hH][eE][lL][pP].[mM][dD]
 target/
+# Base de datos H2 local
+/data/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
