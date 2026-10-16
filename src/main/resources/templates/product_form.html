@@ -12,7 +12,8 @@
         <h1  th:text="${product.id == null ? 'Añadir producto' : 'Editar producto'}">Producto</h1>
 
         <div class="formulario">
-            <form th:action="${product.id == null} ? @{/products/add} : @{/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
+            <form th:action="@{/products/save}" th:object="${product}" method="post">
+                <input type="hidden" th:field="*{id}">
                 <div class="campo">
                     <label for="name" >Nombre del producto</label>
                     <input type="text" id="name" th:field="*{name}"  required>

@@ -52,18 +52,6 @@ public class ProductoController {
     	return "products";
     }
     
-    @PostMapping("/add")
-    public String addProduct(@RequestParam String name, @RequestParam double price, RedirectAttributes redirectAttributes) {
-    	Producto product = new Producto();
-    	product.setName(name);
-    	product.setPrice(price);
-    	
-    	productoService.saveProduct(product);
-        redirectAttributes.addFlashAttribute("successMessage", "Producto añadido correctamente.");
-    	
-    	return "redirect:/products";
-    }
-    
     @GetMapping("/add")
     public String showAddForm(Model model) {
     	model.addAttribute("product", new Producto());
@@ -81,18 +69,16 @@ public class ProductoController {
     	return "product_form";
     }
     
-    @PostMapping("/edit/{id}")
-    	public String editProduct(@PathVariable Long id, @RequestParam String name, @RequestParam double price, RedirectAttributes redirectAttributes) {
-    		Producto product = productoService.getProductoById(id);
-    		if (product != null) {
-    			product.setName(name);
-    			product.setPrice(price);
-    			productoService.saveProduct(product);
-                redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
-    		} else {
-                redirectAttributes.addFlashAttribute("errorMessage", "El producto ya no está disponible.");
-            }
-    		return "redirect:/products";
+    @PostMapping("/save")
+    public String saveProduct(Producto product, RedirectAttributes redirectAttributes) {
+        boolean isNew = product.getId() == null;
+        productoService.saveProduct(product);
+        if (isNew) {
+            redirectAttributes.addFlashAttribute("successMessage", "Producto añadido correctamente.");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
+        }
+        return "redirect:/products";
     }
     
     @PostMapping("/delete/{id}")
